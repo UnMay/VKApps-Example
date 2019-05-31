@@ -19,9 +19,25 @@ class App extends React.Component {
 		// Наш основной объект с данными
 		this.state = {
 			user_id: null, // Понадобится для отправки метода groups.get
-			groups: null, // Сюда положу массив из групп
+			groups: [
+				{
+					photo: "https://pp.userapi.com/c830400/v830400259/1994e1/RdPCoqeddWQ.jpg",
+					name: "TaleStorm",
+					link: "https://vk.com/talestorm"
+				},
+				{
+					photo: "https://sun4-3.userapi.com/c851536/v851536331/139767/7wZ5anFUJNA.jpg",
+					name: "ПОЗОР シ",
+					link: "https://vk.com/styd.pozor"
+				},
+				{
+					photo: "https://pp.userapi.com/c846420/v846420985/1526c3/ISX7VF8NjZk.jpg",
+					name: "VK Mini Apps",
+					link: "https://vk.com/vkappsdev"
+				},
+			], // Сюда положу массив из групп
 			access_token: null, // Здесь будет токен, чтобы отправить запрос к апи
-			index: 0 // Это индекс главной группы, которую выберет рандом
+			index: null // Это индекс главной группы, которую выберет рандом
 		};
 	}
 
@@ -39,7 +55,7 @@ class App extends React.Component {
 				// Когда пользователь дал токен
 				case 'VKWebAppAccessTokenReceived':
 					// Отправляем метод groups.get с необходимыми параметрами и request_id
-					connect.send("VKWebAppCallAPIMethod", {"method": "groups.get", "request_id": "1", "params": {"user_id": this.state.user_id, "count": 100, "extended": 1, "v":"5.95", "access_token":e.detail.data.access_token}});
+					connect.send("VKWebAppCallAPIMethod", {"method": "groups.get", "request_id": "1", "params": {"user_id": this.state.user_id, "count": 100, "extended": 1, "v":"5.95", "fields": "activity", "access_token":e.detail.data.access_token}});
 					break;
 				// Если вызов апи успешен
 				case 'VKWebAppCallAPIMethodResult':
@@ -62,7 +78,7 @@ class App extends React.Component {
 						// Здесь уже адекватные данные
 						.then(data => {
 							// Кладу в this.state.groups все группы из пришедшего API и в индекс номер, который прислал запрос
-							this.setState({groups: e.detail.data.response.items, index: data})
+							this.setState({index: data})
 						})
 					}
 					break;
@@ -82,9 +98,9 @@ class App extends React.Component {
 				<Panel id="home">
 					<PanelHeader>Example</PanelHeader>
 					{
-						// Здесь проверяю есть ли в this.state.groups что-нибудь, если нет
-						// отображаю кнопку получить подписки и дефолтные группы
-						!this.state.groups ? 
+						// Здесь проверяю есть ли в this.state.index что-нибудь, если нет
+						// отображаю кнопку получить подписки
+						!this.state.index ? 
 						<div>
 							{/* Отрисовываю вкшные компоненты, чтобы выглядело ок */}
 							<Group>
@@ -101,53 +117,30 @@ class App extends React.Component {
 						</div> 
 						// Если же this.state.groups !== false отрисовываю то, что ниже
 						:
-						<div>
-							<Group style={{padding: "10px"}}>								
-								<center>
-									{/* this.state.index имеет значение 0/1/2 и получаю группы с таким индексом */}
-									<img alt="first_groups" src={this.state.groups[this.state.index].photo_200} /> <br />
-									<p>Вам подходит группа {this.state.groups[this.state.index].name}</p>
-								</center>
-							</Group>
-							<Group>
-								<List>
-									{/* Здесь мучу условие, типа если группы есть, то 
-										использую функцию массивов map, которая пробегается по каждому
-										элементу массива и возваращает ячейки с key, которая равана индексу
-										каждого элемента.
-										В before кладу компонент Avatar, before = штука слева в ячейке
-									*/}
-									{this.state.groups && this.state.groups.map((group, i) =>
-										<Cell
-											key={i}
-											before={<Avatar src={group.photo_50} />}
-										>{group.name}</Cell>	
-									)}
-								</List>
-							</Group>
-						</div>
+						<Group style={{padding: "10px"}}>								
+							<center>
+								{/* this.state.index имеет значение 0/1/2 и получаю группы с таким индексом */}
+								<img height="200px" alt="first_groups" src={this.state.groups[this.state.index].photo} /> <br />
+								<p>Вам подходит группа {this.state.groups[this.state.index].name}</p>
+							</center>
+						</Group>
 					}
 					<Group>
 						<List>
 							{/* Отрисовываются компоненты ссылки */}
-							<Cell
-								component="a"
-								target="_blank"
-								href="https://vk.com/talestorm"
-								before={<Avatar src="https://pp.userapi.com/c830400/v830400259/1994e1/RdPCoqeddWQ.jpg" />}
-							>TaleStorm</Cell>
-							<Cell
-								component="a"
-								target="_blank"
-								href="https://vk.com/talestorm"
-								before={<Avatar src="https://pp.userapi.com/c830400/v830400259/1994e1/RdPCoqeddWQ.jpg" />}
-							>TaleStorm</Cell>
-							<Cell
-								component="a"
-								target="_blank"
-								href="https://vk.com/talestorm"
-								before={<Avatar src="https://pp.userapi.com/c830400/v830400259/1994e1/RdPCoqeddWQ.jpg" />}
-							>TaleStorm</Cell>
+							{
+								// Юзаю метод массивов мап, чтобы пробежаться по 
+								// всему массиву и отобразить ячейки
+								this.state.groups && this.state.groups.map((group, i) => 
+								<Cell
+									key={i}
+									component="a"
+									target="_blank"
+									href={group.link}
+									before={<Avatar src={group.photo} />}
+								>{group.name}</Cell>
+								)
+							}
 						</List>
 					</Group>
 				</Panel>

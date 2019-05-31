@@ -98,29 +98,6 @@ class App extends React.Component {
 									</Button>
 								</Div>
 							</Group>
-							<Group>
-								<List>
-									{/* Отрисовываются компоненты ссылки */}
-									<Cell
-										component="a"
-										target="_blank"
-										href="https://vk.com/talestorm"
-										before={<Avatar src="https://pp.userapi.com/c830400/v830400259/1994e1/RdPCoqeddWQ.jpg" />}
-									>TaleStorm</Cell>
-									<Cell
-										component="a"
-										target="_blank"
-										href="https://vk.com/talestorm"
-										before={<Avatar src="https://pp.userapi.com/c830400/v830400259/1994e1/RdPCoqeddWQ.jpg" />}
-									>TaleStorm</Cell>
-									<Cell
-										component="a"
-										target="_blank"
-										href="https://vk.com/talestorm"
-										before={<Avatar src="https://pp.userapi.com/c830400/v830400259/1994e1/RdPCoqeddWQ.jpg" />}
-									>TaleStorm</Cell>
-								</List>
-							</Group>
 						</div> 
 						// Если же this.state.groups !== false отрисовываю то, что ниже
 						:
@@ -150,6 +127,29 @@ class App extends React.Component {
 							</Group>
 						</div>
 					}
+					<Group>
+						<List>
+							{/* Отрисовываются компоненты ссылки */}
+							<Cell
+								component="a"
+								target="_blank"
+								href="https://vk.com/talestorm"
+								before={<Avatar src="https://pp.userapi.com/c830400/v830400259/1994e1/RdPCoqeddWQ.jpg" />}
+							>TaleStorm</Cell>
+							<Cell
+								component="a"
+								target="_blank"
+								href="https://vk.com/talestorm"
+								before={<Avatar src="https://pp.userapi.com/c830400/v830400259/1994e1/RdPCoqeddWQ.jpg" />}
+							>TaleStorm</Cell>
+							<Cell
+								component="a"
+								target="_blank"
+								href="https://vk.com/talestorm"
+								before={<Avatar src="https://pp.userapi.com/c830400/v830400259/1994e1/RdPCoqeddWQ.jpg" />}
+							>TaleStorm</Cell>
+						</List>
+					</Group>
 				</Panel>
 			</View>
 		);
